@@ -3,12 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Code Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            background-color: #f0f0f0;
+        }
+        .leftPart, .rightPart {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .leftPart {
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .content:last-child {
+            margin-bottom: 0;
+        }
+        .leftPart .content label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .leftPart .content textarea {
+            flex: 1;
+            resize: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fafafa;
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+        .rightPart {
+            background-color: #fafafa;
+        }
+        .rightPart label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .rightPart iframe {
+            flex: 1;
+            border: none;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
-    This is the tab
-    <script type="module" src="app.js"></script>
+    <div class="leftPart">
+        <div class="content">
+            <label>HTML</label>
+            <textarea id="htmlInput"></textarea>
+        </div>
+        <div class="content">
+            <label>CSS</label>
+            <textarea id="cssInput"></textarea>
+        </div>
+        <div class="content">
+            <label>JS</label>
+            <textarea id="jsInput"></textarea>
+        </div>
+    </div>
+    <div class="rightPart">
+        <label>Output</label>
+        <iframe id="output"></iframe>
+    </div>
+
+    <script>
+        const output = document.querySelector("#output");
+        const htmlInput = document.querySelector("#htmlInput");
+        const cssInput = document.querySelector("#cssInput");
+        const jsInput = document.querySelector("#jsInput");
+
+        function updateOutput() {
+            const htmlCode = htmlInput.value;
+            const cssCode = cssInput.value;
+            const jsCode = jsInput.value;
+
+            const doc = output.contentDocument;
+            doc.open();
+            doc.write(`
+                <style>${cssCode}</style>
+                ${htmlCode}
+                <script>${jsCode}<\/script>
+            `);
+            doc.close();
+        }
+
+        htmlInput.addEventListener("keyup", updateOutput);
+        cssInput.addEventListener("keyup", updateOutput);
+        jsInput.addEventListener("keyup", updateOutput);
+    </script>
 </body>
 </html>
